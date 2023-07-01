@@ -1,0 +1,9 @@
+#Node Modules
+node_modules/
+npm-debug.log
+
+#Build Files
+build/
+
+#Databases
+db.nhl
