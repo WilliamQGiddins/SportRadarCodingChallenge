@@ -1,50 +1,71 @@
+'use strict'
+
 import { initalizeDatabase } from "./lib/nhl_database";
 import { ReadLiveNHLGame } from "./lib/read_live_nhl_data";
 import { ScheduleDailyNhlGames } from "./lib/scheudle_nhl_games";
 import { CronJob } from 'cron';
+import { GameSchedule } from "./model/nhl";
 
 
-initalizeDatabase();
+async function initializeNhlStatsApp() {
+    initalizeDatabase();
 
-//First Process
-//Schedule games runs on init and at midnight everyday 
-//Parse output into object array of gameId and startTime
-//Monitor for when a startTime is close and then call ReadLiveNHLGame with gameID
+    //First Process
+    //Schedule games runs on init and at midnight everyday then Call watchForGames()
+    const scheduler = new ScheduleDailyNhlGames();
+    let todaysSchedule = await scheduler.createSchedule()
+    watchForGames(todaysSchedule);
 
-const scheduler = new ScheduleDailyNhlGames();
-let todaysSchedule = scheduler.parseSchedule();
-watchForGames();
 
-const scheduleCron = new CronJob(
-    '0 0 * * * * ', //Run every Midnight
-    async () => {
-        //Parse Schedule OutPut into object array
-        todaysSchedule = scheduler.parseSchedule();
-        watchForGames();
-        console.log('Complete Schedule');
-    },
-    null,
-    true,
-);
+    const scheduleCron = new CronJob(
+        '0 0 * * * ', //Run every Midnight
+        async () => {
+            todaysSchedule = await scheduler.createSchedule();
+            console.log(`Schedule for ${new Date} complete`);
+            watchForGames(todaysSchedule);
+        },
+        null,
+        true,
+    );
 
-//Constantly Check for games that will be 5 minutes from starting 
-//Currently will stop at end of one day of games
-function watchForGames () : void {
-    while(todaysSchedule?.length) {
-        let upcomingGame = todaysSchedule.find(game => new Date(game.startDateTime).getTime() - new Date().getTime() <= 300000);
-        if(upcomingGame) {
-            try {
-                //Second Process
-                const currentGame = new ReadLiveNHLGame(upcomingGame.gameId);
-                currentGame.readPlayerInfo();
-                currentGame.startReading();
-                //As you read in gameData after every read in check gameData.datetime.endDateTime if its populated then call stop for that instance
-                //currentGame.stopReading();
-            } catch(e) {
-                console.log(e);
-            }
-        }
+    //Continuosuly check for games that will be 5 minutes from starting 
+    async function watchForGames (currentSchedule: GameSchedule[]) : Promise<void> {
+        
+        const gameWatchCron = new CronJob(
+            '* * * * * ',  // Run every minute
+            async () => {
+                //let upcomingGame = currentSchedule.find(game => Math.abs(new Date(game.startDateTime).getTime() - new Date().getTime()) <= 300000);
+                
+                //TESTING
+                let upcomingGame = currentSchedule.find(game => new Date(game.startDateTime).getTime() - new Date().getTime() <= 300000);
+
+                console.log('Upcoming Game ' + JSON.stringify(upcomingGame, null, 2) );
+                if(upcomingGame) {
+                    try {
+                        const currentGame = new ReadLiveNHLGame(upcomingGame.gameId);
+                        currentGame.readPlayerInfo();
+                        currentGame.startReading();
+                        //Remove Current Game from schedule
+                        currentSchedule = currentSchedule.filter(game => game !== upcomingGame) 
+
+                        //As you read in gameData after every read in check gameData.datetime.endDateTime if its populated then call stop for that instance
+                        //currentGame.stopReading();
+                        if(!currentSchedule?.length) {
+                            console.log(`Stopping game watch feed for ${new Date}`)
+                            gameWatchCron.stop();
+                        }
+                    } catch(e) {
+                        console.log(e);
+                    }
+                }
+            },
+            null,
+            false
+        );
+        
+        console.log(`Starting game watch feed for ${new Date}`)
+        gameWatchCron.start();
     }
 }
 
-console.log('Hello world!')
+initializeNhlStatsApp();

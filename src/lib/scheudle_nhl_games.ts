@@ -1,21 +1,44 @@
-interface GameSchedule {
-    gameId: string,
-    startDateTime: string
-}
+'use strict'
+
+import axios from 'axios'
+import { NHLGameInfo , GameSchedule } from "../model/nhl"
 
 export class ScheduleDailyNhlGames {
+    async getDailySchedule () : Promise<NHLGameInfo []> {
+        const date = new Date();
+        const dateParameter = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+        const apiUrl = `https://statsapi.web.nhl.com/api/v1/schedule?date=${dateParameter}`;
+        let gameSchedule: NHLGameInfo [] = [];
 
-    getDailySchedule () : String {
-        //Make Schedule API call for todays gaames
-        //https://statsapi.web.nhl.com/api/v1/schedule?date=2017-10-04
-        //Return Json object to parse
-        return 'Json Object to be parsed'
+        //Make Schedule API call for todays games
+        try {
+            //const response = await axios.get(apiUrl);
+            //Testing
+            const response = await axios.get('https://statsapi.web.nhl.com/api/v1/schedule?date=2017-10-04');
+
+            if (response.data.dates?.length) {
+                gameSchedule = response.data.dates[0].games;
+            } 
+        } catch (e) {
+            console.log(e);
+        }
+        return gameSchedule;
     }
 
-    parseSchedule(): GameSchedule[] {
-        this.getDailySchedule()
+    async createSchedule(): Promise<GameSchedule []> {
+        const games = await this.getDailySchedule()
+
         //Parse Json Object into Array of GameSchedules
-        return [];
+        const gameSchedule : GameSchedule [] = [];
+        if(games?.length) {
+            for (const game of games) {
+                gameSchedule.push( {
+                    gameId : game.gamePk,
+                    startDateTime: game.gameDate
+                })
+                console.log('Test ' + game.gamePk +' ' + game.gameDate)
+            }
+        }
+        return gameSchedule;
     }
-
 }

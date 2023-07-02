@@ -1,10 +1,11 @@
 import { CronJob } from 'cron';
 
 
-const liveGameAPI : String = 'https://statsapi.web.nhl.com/api/v1/game/2017020001/feed/live'
+const liveGameAPI : string = 'https://statsapi.web.nhl.com/api/v1/game/2017020001/feed/live'
 
 export class ReadLiveNHLGame {
-    private gameId:String;
+    private gameId:string;
+    
     private ingestGameData = new CronJob(
         '0/15 * * * * * ', //Run every 15 seconds
         async () : Promise<void> => {
@@ -18,7 +19,7 @@ export class ReadLiveNHLGame {
         false,
     );
     
-    constructor(gameId:String) {
+    constructor(gameId:string) {
         this.gameId = gameId;
     }
 

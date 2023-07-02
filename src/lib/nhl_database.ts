@@ -23,11 +23,6 @@ export function  initalizeDatabase() : void {
     db.exec(fs.readFileSync(__dirname + '/sql/create_nhl_player_table.sql').toString());
     db.exec(fs.readFileSync(__dirname + '/sql/create_nhl_team_table.sql').toString());
 
-    db.get(
-        'SELECT RANDOM() % 100 as result',
-        (_, res) => console.log(res)
-    );
-
     /*
     db.exec(fs.readFileSync(__dirname + '/sql/insert.sql').toString());
 
