@@ -33,7 +33,7 @@ export interface NHLGameInfo {
                 ot: number,
                 type: string
             },
-            score: 2,
+            score: number,
             team: {
                 id: number,
                 name: string,
@@ -50,19 +50,112 @@ export interface NHLGameInfo {
     }
 }
 
-export interface NHLGameStats {
-
+export interface NHLPlayerStats {
+    person: {
+        id: number,
+        fullName: string,
+        link: string,
+        shootsCatches: string,
+        rosterStatus: string
+    },
+    jerseyNumber: string,
+    position: {
+        code: string,
+        name: string,
+        type: string,
+        abbreviation: string
+    },
+    stats: {
+        skaterStats: {
+            timeOnIce: string,
+            assists: number,
+            goals: number,
+            shots: number,
+            hits: number,
+            powerPlayGoals: number,
+            powerPlayAssists: number,
+            penaltyMinutes: number,
+            faceOffWins: number,
+            faceoffTaken: number,
+            takeaways: number,
+            giveaways: number,
+            shortHandedGoals: number,
+            shortHandedAssists: number,
+            blocked: number,
+            plusMinus: number,
+            evenTimeOnIce: string,
+            powerPlayTimeOnIce: string,
+            shortHandedTimeOnIce: string
+        }
+    }
 }
 
-export interface NHLPlayerStats {
-
+export interface NHLPlayerInfo { 
+    id: number,
+    fullName: string,
+    link: string,
+    firstName: string,
+    lastName: string,
+    primaryNumber: string,
+    birthDate: string,
+    currentAge: number,
+    birthCity: string,
+    birthStateProvince: string,
+    birthCountry: string,
+    nationality: string,
+    height: string,
+    weight: number,
+    active: boolean,
+    alternateCaptain: boolean,
+    captain: boolean,
+    rookie: boolean,
+    shootsCatches: string,
+    rosterStatus: string,
+    currentTeam: {
+        id: number,
+        name: string,
+        link: string,
+        triCode: string
+    },
+    primaryPosition: {
+        code: string,
+        name: string,
+        type: string,
+        abbreviation: string
+    }
 }
 
 export interface NHLTeamStats {
-
+    team: {
+        id: number,
+        name: string,
+        link: string,
+        abbreviation: string,
+        triCode: string
+    },
+    teamStats: {
+        teamSkaterStats: {
+            goals: number,
+            pim: number,
+            shots: number,
+            powerPlayPercentage: string,
+            powerPlayGoals: number,
+            powerPlayOpportunities: number,
+            faceOffWinPercentage: string,
+            blocked: number,
+            takeaways: number,
+            giveaways: number,
+            hits: number
+        }
+    }
 }
 
 export interface GameSchedule {
     gameId: string,
-    startDateTime: string
+    startDateTime: string,
+    homeTeamId: number,
+    homeTeamName: string,
+    awayTeamId: number,
+    awayTeamName: string,
+    season: string
 }

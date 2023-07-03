@@ -8,12 +8,12 @@ import { GameSchedule } from "./model/nhl";
 
 
 async function initializeNhlStatsApp() {
-    initalizeDatabase();
+    const db = initalizeDatabase();
 
     //First Process
     //Schedule games runs on init and at midnight everyday then Call watchForGames()
     const scheduler = new ScheduleDailyNhlGames();
-    let todaysSchedule = await scheduler.createSchedule()
+    let todaysSchedule = await scheduler.createSchedule();
     watchForGames(todaysSchedule);
 
 
@@ -32,26 +32,25 @@ async function initializeNhlStatsApp() {
     async function watchForGames (currentSchedule: GameSchedule[]) : Promise<void> {
         
         const gameWatchCron = new CronJob(
-            '* * * * * ',  // Run every minute
+            '* * * * *',  //Run every minute
             async () => {
                 //let upcomingGame = currentSchedule.find(game => Math.abs(new Date(game.startDateTime).getTime() - new Date().getTime()) <= 300000);
                 
                 //TESTING
                 let upcomingGame = currentSchedule.find(game => new Date(game.startDateTime).getTime() - new Date().getTime() <= 300000);
 
-                console.log('Upcoming Game ' + JSON.stringify(upcomingGame, null, 2) );
+                console.log('Upcoming Game ' + JSON.stringify(upcomingGame, null, 2));
                 if(upcomingGame) {
                     try {
-                        const currentGame = new ReadLiveNHLGame(upcomingGame.gameId);
+                        const currentGame = new ReadLiveNHLGame(upcomingGame, db);
                         currentGame.readPlayerInfo();
-                        currentGame.startReading();
-                        //Remove Current Game from schedule
-                        currentSchedule = currentSchedule.filter(game => game !== upcomingGame) 
+                        currentGame.startReadingGame();
 
-                        //As you read in gameData after every read in check gameData.datetime.endDateTime if its populated then call stop for that instance
-                        //currentGame.stopReading();
+                        //Remove Current Game from schedule
+                        currentSchedule = currentSchedule.filter(game => game !== upcomingGame);
+
                         if(!currentSchedule?.length) {
-                            console.log(`Stopping game watch feed for ${new Date}`)
+                            console.log(`Stopping game watch feed for ${new Date}`);
                             gameWatchCron.stop();
                         }
                     } catch(e) {
@@ -63,7 +62,7 @@ async function initializeNhlStatsApp() {
             false
         );
         
-        console.log(`Starting game watch feed for ${new Date}`)
+        console.log(`Starting game watch feed for ${new Date}`);
         gameWatchCron.start();
     }
 }
