@@ -28,10 +28,11 @@ export class ReadLiveNHLGame {
         this.db = db;
     }
 
-    startReadingGame():void {
+    async startReadingGame(): Promise<void> {
         console.log(`Game ${this.gameInfo.gameId} has begun`);
         this.ingestGameData.start();
     }
+    
     stopReadingGame():void{
         console.log(`Game ${this.gameInfo.gameId} has ended`);
         this.ingestGameData.stop();

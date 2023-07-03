@@ -130,11 +130,71 @@ export function initalizeDatabase() : Database {
         }
  }
 
- export function readPlayers(db:Database, game: NHLGameInfo) : void
+ export function readPlayerInfo(db:Database, playerId: string | undefined, callback:Function)
  {
-    db.all(
-        'SELECT COUNT(full_name) FROM nhl_players',
-        (_, res) => console.log(res)
-      );
+    if(playerId) {
+        db.all(
+            'SELECT * FROM nhl_players WHERE id = ? ',
+            [Number(playerId)],
+            (err, res) => {
+                if(err) {
+                    console.log(err);
+                }
+                callback(res) 
+            }
+        );
+    }
+    return;
  }
- //To DO: Add Read Functions
+
+ export function readPlayerStats(db:Database, playerId: string | undefined, season: string | undefined, callback:Function)
+ {
+    if(playerId && season) {
+        db.all(
+            'SELECT * FROM nhl_player_stats INNER JOIN nhl_players ON nhl_player_stats.id=nhl_players.id WHERE id_season = ? ',
+            [`${playerId}_${season}`],
+            (err, res) => {
+                if(err) {
+                    console.log(err);
+                }
+                console.log(res);
+                callback(res) 
+            }
+        );
+    }
+    return;
+ }
+
+ export function readTeamStats(db:Database, teamId: string | undefined, season: string | undefined, callback:Function)
+ {
+    if(teamId && season) {
+        db.all(
+            'SELECT * FROM nhl_team_stats WHERE id_season = ? ',
+            [`${teamId}_${season}`],
+            (err, res) => {
+                if(err) {
+                    console.log(err);
+                }
+                callback(res) 
+            }
+        );
+    }
+    return;
+ }
+
+ export function readGameStats(db:Database, playerId: string | undefined, gameId: string | undefined, callback:Function)
+ {
+    if(playerId && gameId) {
+        db.all(
+            'SELECT * FROM nhl_games WHERE playerid_gameid = ? ',
+            [`${playerId}_${gameId}`],
+            (err, res) => {
+                if(err) {
+                    console.log(err);
+                }
+                callback(res) 
+            }
+        );
+    } 
+    return;
+ }

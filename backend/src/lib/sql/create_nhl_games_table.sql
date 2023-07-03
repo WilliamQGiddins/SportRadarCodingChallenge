@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS nhl_games(
+CREATE TABLE IF NOT EXISTS nhl_games (
     playerid_gameid VARCHAR(40) NOT NULL PRIMARY KEY,
     player_id INTEGER NOT NULL,
     game_id VARCHAR(40) NOT NULL,

@@ -1,28 +1,26 @@
 'use strict'
 
-import { initalizeDatabase } from "./lib/nhl_database";
 import { ReadLiveNHLGame } from "./lib/read_live_nhl_data";
 import { ScheduleDailyNhlGames } from "./lib/scheudle_nhl_games";
 import { CronJob } from 'cron';
 import { GameSchedule } from "./model/nhl";
+import { Database } from "sqlite3";
 
 
-async function initializeNhlStatsApp() {
-    const db = initalizeDatabase();
-
+export async function initializeNhlStatsApp(db:Database) {
     //First Process
     //Schedule games runs on init and at midnight everyday then Call watchForGames()
     const scheduler = new ScheduleDailyNhlGames();
     let todaysSchedule = await scheduler.createSchedule();
-    watchForGames(todaysSchedule);
-
+    console.log(`Schedule for ${new Date} complete`);
+    await watchForGames(todaysSchedule);
 
     const scheduleCron = new CronJob(
-        '0 0 * * * ', //Run every Midnight
+        '0 0 * * *', //Run every Midnight
         async () => {
             todaysSchedule = await scheduler.createSchedule();
             console.log(`Schedule for ${new Date} complete`);
-            watchForGames(todaysSchedule);
+            await watchForGames(todaysSchedule);
         },
         null,
         true,
@@ -43,8 +41,8 @@ async function initializeNhlStatsApp() {
                 if(upcomingGame) {
                     try {
                         const currentGame = new ReadLiveNHLGame(upcomingGame, db);
-                        currentGame.readPlayerInfo();
-                        currentGame.startReadingGame();
+                        await currentGame.readPlayerInfo();
+                        await currentGame.startReadingGame();
 
                         //Remove Current Game from schedule
                         currentSchedule = currentSchedule.filter(game => game !== upcomingGame);
@@ -66,5 +64,3 @@ async function initializeNhlStatsApp() {
         gameWatchCron.start();
     }
 }
-
-initializeNhlStatsApp();
