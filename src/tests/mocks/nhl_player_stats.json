@@ -1,0 +1,40 @@
+[{
+    "person": {
+        "id": 8474709,
+        "fullName": "Matt Martin",
+        "link": "/api/v1/people/8474709",
+        "shootsCatches": "L",
+        "rosterStatus": "Y"
+    },
+    "jerseyNumber": "15",
+    "position": {
+        "code": "L",
+        "name": "Left Wing",
+        "type": "Forward",
+        "abbreviation": "LW"
+    },
+    "stats": {
+        "skaterStats": {
+            "timeOnIce": "7:35",
+            "assists": 0,
+            "goals": 0,
+            "shots": 0,
+            "hits": 6,
+            "powerPlayGoals": 0,
+            "powerPlayAssists": 0,
+            "penaltyMinutes": 0,
+            "faceOffPct": 100.0,
+            "faceOffWins": 1,
+            "faceoffTaken": 1,
+            "takeaways": 0,
+            "giveaways": 0,
+            "shortHandedGoals": 0,
+            "shortHandedAssists": 0,
+            "blocked": 0,
+            "plusMinus": -1,
+            "evenTimeOnIce": "7:35",
+            "powerPlayTimeOnIce": "0:00",
+            "shortHandedTimeOnIce": "0:00"
+        }
+    }
+}]

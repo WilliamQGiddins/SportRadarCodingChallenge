@@ -1,0 +1,54 @@
+
+[
+{
+    "gamePk": "2017020001",
+    "link": "/api/v1/game/2017020001/feed/live",
+    "gameType": "R",
+    "season": "20172018",
+    "gameDate": "2017-10-04T23:00:00Z",
+    "status": {
+        "abstractGameState": "Final",
+        "codedGameState": "7",
+        "detailedState": "Final",
+        "statusCode": "7",
+        "startTimeTBD": false
+    },
+    "teams": {
+        "away": {
+            "leagueRecord": {
+                "wins": 1,
+                "losses": 0,
+                "ot": 0,
+                "type": "league"
+            },
+            "score": 7,
+            "team": {
+                "id": 10,
+                "name": "Toronto Maple Leafs",
+                "link": "/api/v1/teams/10"
+            }
+        },
+        "home": {
+            "leagueRecord": {
+                "wins": 0,
+                "losses": 1,
+                "ot": 0,
+                "type": "league"
+            },
+            "score": 2,
+            "team": {
+                "id": 52,
+                "name": "Winnipeg Jets",
+                "link": "/api/v1/teams/52"
+            }
+        }
+    },
+    "venue": {
+        "name": "Bell MTS Place",
+        "link": "/api/v1/venues/null"
+    },
+    "content": {
+        "link": "/api/v1/game/2017020001/content"
+    }
+}
+]

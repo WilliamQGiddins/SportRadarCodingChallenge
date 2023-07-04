@@ -1,6 +1,6 @@
 import { Database } from "sqlite3";
 import * as fs from 'fs';
-import { NHLPlayerInfo, NHLTeamStats , NHLPlayerStats, NHLGameInfo, GameSchedule } from "../model/nhl";
+import { NHLPlayerInfo, NHLTeamStats , NHLPlayerStats, GameSchedule } from "../model/nhl";
 import { nhlPlayersInsert, nhlGameStatsInsert, nhlGameStatsUpdate, nhlPlayerStatsInsert, 
     nhlPlayerStatsUpdate,nhlTeamStatsInsert, nhlTeamStatsUpdate} from "./sql/sql_queries";
 

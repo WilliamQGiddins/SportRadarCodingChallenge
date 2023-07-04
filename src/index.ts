@@ -44,5 +44,5 @@ app.get( "/api/v1/game", ( req: Request, res:Response ) => {
 
 // Start the Express server
 app.listen( port, () => {
-    console.log( `Server started at http://localhost:${ port }` );
+    console.log( `App started at http://localhost:${ port }` );
 } );

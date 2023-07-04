@@ -12,7 +12,7 @@ export class ReadLiveNHLGame {
         '0/15 * * * * * ', //Run every 15 seconds
         async () : Promise<void> => {
             //Read NHL Data from API
-            const isGameOver = await readNhlGameData(this.gameInfo, this.db);
+            const isGameOver = await this.readNhlGameData(this.gameInfo, this.db);
 
             //If Game is Over Stop Reading
              if(isGameOver) {
@@ -33,7 +33,7 @@ export class ReadLiveNHLGame {
         this.ingestGameData.start();
     }
     
-    stopReadingGame():void{
+    private stopReadingGame():void{
         console.log(`Game ${this.gameInfo.gameId} has ended`);
         this.ingestGameData.stop();
     }
@@ -58,43 +58,40 @@ export class ReadLiveNHLGame {
         }
     }
 
-}
+    async readNhlGameData(gameInfo: GameSchedule, db:Database) : Promise<boolean> {
+        console.log(`Checking Updated Stats for Game: ${gameInfo.gameId}`);
+        let isGameOver: boolean = false;
+        const apiUrl = `https://statsapi.web.nhl.com/api/v1/game/${gameInfo.gameId}/feed/live`;
+        try {
+            const response = await axios.get(apiUrl);
+            const awayTeam = response.data?.liveData?.boxscore?.teams?.away;
+            const homeTeam = response.data?.liveData?.boxscore?.teams?.home;
+            isGameOver = !!response.data?.gameData?.datetime?.endDateTime;
+            const homePlayerStats : NHLPlayerStats [] = [];
+            const awayPlayerStats : NHLPlayerStats [] = [];
+            const teamStats : NHLTeamStats [] = [];
+    
+            if (awayTeam && homeTeam) {
+                //Get player stats for both teams
+                for (const player in awayTeam.players) {
+                    awayPlayerStats.push(awayTeam.players[player]);
+                }
+                for (const player in homeTeam.players) {
+                    homePlayerStats.push(homeTeam.players[player]);
+                }
+    
+                //Get home and away team stats
+                teamStats.push(homeTeam);
+                teamStats.push(awayTeam);
 
-async function readNhlGameData(gameInfo: GameSchedule, db:Database) : Promise<boolean> {
-    //Read game stats from API
-    console.log('Read From API');
-    let isGameOver: boolean = false;
-    const apiUrl = `https://statsapi.web.nhl.com/api/v1/game/${gameInfo.gameId}/feed/live`;
-    try {
-        const response = await axios.get(apiUrl);
-        const awayTeam = response.data?.liveData?.boxscore?.teams?.away;
-        const homeTeam = response.data?.liveData?.boxscore?.teams?.home;
-        isGameOver = !!response.data?.gameData?.datetime?.endDateTime;
-        const homePlayerStats : NHLPlayerStats [] = [];
-        const awayPlayerStats : NHLPlayerStats [] = [];
-        const teamStats : NHLTeamStats [] = [];
-
-
-        if (awayTeam && homeTeam) {
-            //Get player stats for both teams
-            for (const player in awayTeam.players) {
-                awayPlayerStats.push(awayTeam.players[player]);
+            //Write Updated Stats To Database
+            writePlayerStats(db, homePlayerStats, gameInfo, 'home');
+            writePlayerStats(db, awayPlayerStats, gameInfo, 'away');
+            writeTeamStats(db, teamStats, gameInfo);
             }
-            for (const player in homeTeam.players) {
-                homePlayerStats.push(homeTeam.players[player]);
-            }
-
-            //Get home and away team stats
-            teamStats.push(homeTeam);
-            teamStats.push(awayTeam);
+        } catch (e) {
+            console.log(e);
         }
-
-        //Write Updated Stats To Database
-        writePlayerStats(db, homePlayerStats, gameInfo, 'home');
-        writePlayerStats(db, awayPlayerStats, gameInfo, 'away');
-        writeTeamStats(db, teamStats, gameInfo);
-    } catch (e) {
-        console.log(e);
+        return isGameOver;
     }
-    return isGameOver;
 }
