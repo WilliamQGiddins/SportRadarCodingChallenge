@@ -1,14 +1,13 @@
 'use strict'
 
-import { ReadLiveNHLGame } from "./lib/read_live_nhl_data";
-import { ScheduleDailyNhlGames } from "./lib/scheudle_nhl_games";
+import { ReadLiveNHLGame } from "./read_live_nhl_data";
+import { ScheduleDailyNhlGames } from "./scheudle_nhl_games";
 import { CronJob } from 'cron';
-import { GameSchedule } from "./model/nhl";
+import { GameSchedule } from "../model/nhl";
 import { Database } from "sqlite3";
 
 
 export async function initializeNhlStatsApp(db:Database) {
-    //First Process
     //Schedule games runs on init and at midnight everyday then Call watchForGames()
     const scheduler = new ScheduleDailyNhlGames();
     let todaysSchedule = await scheduler.createSchedule();
@@ -35,7 +34,7 @@ export async function initializeNhlStatsApp(db:Database) {
                 //let upcomingGame = currentSchedule.find(game => Math.abs(new Date(game.startDateTime).getTime() - new Date().getTime()) <= 300000);
                 
                 //TESTING
-                let upcomingGame = currentSchedule.find(game => new Date(game.startDateTime).getTime() - new Date().getTime() <= 300000);
+                const upcomingGame = currentSchedule.find(game => new Date(game.startDateTime).getTime() - new Date().getTime() <= 300000);
 
                 console.log('Upcoming Game ' + JSON.stringify(upcomingGame, null, 2));
                 if(upcomingGame) {

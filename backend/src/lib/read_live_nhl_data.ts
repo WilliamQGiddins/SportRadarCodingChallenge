@@ -60,7 +60,7 @@ export class ReadLiveNHLGame {
 
     async readNhlGameData(gameInfo: GameSchedule, db:Database) : Promise<boolean> {
         console.log(`Checking Updated Stats for Game: ${gameInfo.gameId}`);
-        let isGameOver: boolean = false;
+        let isGameOver = false;
         const apiUrl = `https://statsapi.web.nhl.com/api/v1/game/${gameInfo.gameId}/feed/live`;
         try {
             const response = await axios.get(apiUrl);

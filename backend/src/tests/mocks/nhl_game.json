@@ -1,6 +1,5 @@
 
-[
-{
+[{
     "gamePk": "2017020001",
     "link": "/api/v1/game/2017020001/feed/live",
     "gameType": "R",
@@ -50,5 +49,4 @@
     "content": {
         "link": "/api/v1/game/2017020001/content"
     }
-}
-]
+}]

@@ -17,8 +17,7 @@ export function initalizeDatabase() : Database {
     return db;
  }
 
- export function writePlayerInfo(db:Database, players: NHLPlayerInfo []) : void
- {
+ export function writePlayerInfo(db:Database, players: NHLPlayerInfo []) : void {
     for (const player of players) {
         db.run(
             nhlPlayersInsert, 
@@ -35,8 +34,7 @@ export function initalizeDatabase() : Database {
     }
  }
 
- export function writePlayerStats(db:Database, players: NHLPlayerStats [], game: GameSchedule, team : string) : void
- {
+ export function writePlayerStats(db:Database, players: NHLPlayerStats [], game: GameSchedule, team : string) : void {
     let playerTeam;
     let opponentTeam;
     if (team === 'home') {
@@ -56,7 +54,7 @@ export function initalizeDatabase() : Database {
     for (const player of players) {
         const person = player.person;
         const stats = player.stats?.skaterStats;
-        if(!stats) {continue}; 
+        if(!stats) {continue} 
         db.run(
             nhlGameStatsInsert, 
             [`${person.id}_${game.gameId}`, person.id, game.gameId, person.fullName, playerTeam.teamId, playerTeam.teamName, player.jerseyNumber,
@@ -102,12 +100,10 @@ export function initalizeDatabase() : Database {
     }
  }
 
- export function writeTeamStats(db:Database, teams: NHLTeamStats [], game: GameSchedule) : void
- {
+ export function writeTeamStats(db:Database, teams: NHLTeamStats [], game: GameSchedule) : void {
     for (const team of teams) {
         const teamInfo = team.team;
         const stats = team.teamStats.teamSkaterStats;
-        const id = `${teamInfo.id}_${game.season}`;
         db.run(
             nhlTeamStatsInsert,
             [`${teamInfo.id}_${game.season}`,teamInfo.id, teamInfo.name, stats.goals, stats.pim,
@@ -130,8 +126,7 @@ export function initalizeDatabase() : Database {
         }
  }
 
- export function readPlayerInfo(db:Database, playerId: string | undefined, callback:Function)
- {
+ export function readPlayerInfo(db:Database, playerId: string | undefined, callback:(res:unknown[]) => void) {
     if(playerId) {
         db.all(
             'SELECT * FROM nhl_players WHERE id = ? ',
@@ -140,15 +135,13 @@ export function initalizeDatabase() : Database {
                 if(err) {
                     console.log(err);
                 }
-                callback(res) 
+                callback(res); 
             }
         );
     }
-    return;
  }
 
- export function readPlayerStats(db:Database, playerId: string | undefined, season: string | undefined, callback:Function)
- {
+ export function readPlayerStats(db:Database, playerId: string | undefined, season: string | undefined, callback:(res:unknown[]) => void) {
     if(playerId && season) {
         db.all(
             'SELECT * FROM nhl_player_stats INNER JOIN nhl_players ON nhl_player_stats.id=nhl_players.id WHERE id_season = ? ',
@@ -157,16 +150,13 @@ export function initalizeDatabase() : Database {
                 if(err) {
                     console.log(err);
                 }
-                console.log(res);
-                callback(res) 
+                callback(res);
             }
         );
     }
-    return;
  }
 
- export function readTeamStats(db:Database, teamId: string | undefined, season: string | undefined, callback:Function)
- {
+ export function readTeamStats(db:Database, teamId: string | undefined, season: string | undefined, callback:(res:unknown[]) => void) {
     if(teamId && season) {
         db.all(
             'SELECT * FROM nhl_team_stats WHERE id_season = ? ',
@@ -175,15 +165,13 @@ export function initalizeDatabase() : Database {
                 if(err) {
                     console.log(err);
                 }
-                callback(res) 
+                callback(res); 
             }
         );
     }
-    return;
  }
 
- export function readGameStats(db:Database, playerId: string | undefined, gameId: string | undefined, callback:Function)
- {
+ export function readGameStats(db:Database, playerId: string | undefined, gameId: string | undefined, callback:(res:unknown[]) => void) {
     if(playerId && gameId) {
         db.all(
             'SELECT * FROM nhl_games WHERE playerid_gameid = ? ',
@@ -192,9 +180,8 @@ export function initalizeDatabase() : Database {
                 if(err) {
                     console.log(err);
                 }
-                callback(res) 
+                callback(res); 
             }
         );
     } 
-    return;
  }

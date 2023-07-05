@@ -1,17 +1,10 @@
 import {expect} from "chai";
 import * as sinon from "sinon";
-import { Database } from "sqlite3";
 import { GameSchedule } from "../model/nhl";
 import { ScheduleDailyNhlGames } from "../lib/scheudle_nhl_games";
 import * as testNhlGame from './mocks/nhl_game.json';
 
 describe('schedule_nhl_games unit tests', () => {
-
-    const fakeDatabase = {
-        exec: () => Database,
-        run: () => Database,
-        all: () => Database
-    } as unknown as Database;
 
     afterEach(()=> {
         sinon.restore();
@@ -20,7 +13,7 @@ describe('schedule_nhl_games unit tests', () => {
     const scheduler = new ScheduleDailyNhlGames();
 
     it('should return NHLGameSchedule array when successful', async () => {
-        const stub = sinon.stub(scheduler, 'getDailySchedule').resolves(
+        sinon.stub(scheduler, 'getDailySchedule').resolves(
             testNhlGame
         )
 
@@ -39,7 +32,7 @@ describe('schedule_nhl_games unit tests', () => {
     });
 
     it('should return empty NHLGameSchedule when no game scheduled or getDailySchedule throws a error', async () => {
-        const stub = sinon.stub(scheduler, 'getDailySchedule').resolves(
+       sinon.stub(scheduler, 'getDailySchedule').resolves(
             []
         )
 

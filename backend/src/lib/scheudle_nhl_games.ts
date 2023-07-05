@@ -40,7 +40,7 @@ export class ScheduleDailyNhlGames {
                     awayTeamId: game.teams.away.team.id,
                     awayTeamName: game.teams.away.team.name,
                     season: game.season
-                })
+                });
             }
         }
         return gameSchedule;

@@ -43,7 +43,7 @@ describe('read_live_nhl_date unit test', () => {
     });
 
     it('should return true if writePlayerStats or writeTeamStats throws a error but game is over', async() => {
-        const writeStub = sinon.stub(Write, 'writePlayerStats').throwsException();
+        sinon.stub(Write, 'writePlayerStats').throwsException();
         const isGameOver = await readLiveNhlGame.readNhlGameData(fakeGameInfo,fakeDatabase);
         expect(isGameOver).eqls(true);
     });
