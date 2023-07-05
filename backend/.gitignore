@@ -4,6 +4,3 @@ npm-debug.log
 
 #Build Files
 build/
-
-#Databases
-db.nhl
