@@ -21,7 +21,7 @@ describe('read_live_nhl_date unit test', () => {
         awayTeamId: 10,
         awayTeamName: 'Toronto Maple Leafs',
         season: '20172018'
-    }
+    };
 
     afterEach(()=> {
         sinon.restore();

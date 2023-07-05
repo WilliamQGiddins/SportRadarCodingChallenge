@@ -10,12 +10,15 @@ it can trigger the job `readNhlGameData()` to monitor live games. Once all games
 
 - `Backend`
 
+  - Navigate to `/backend`
   - Execute: `$ npm install`
   - Execute: `$ npm run build`
   - Execute: `$ npm run test`
   - Execute: `$ npm run start`
 
 - `Frontend`
+
+  - Navigate to `/reactfrontend`
   - Execute: `$ npm install`
   - Execute: `$ npm start`
 

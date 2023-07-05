@@ -63,7 +63,7 @@ export function initalizeDatabase() : Database {
             opponentTeam],
             function(e) {
                 if (e) {
-                    return console.log(e.message)
+                    return console.log(e.message);
                 }
         });
         db.run(
@@ -73,7 +73,7 @@ export function initalizeDatabase() : Database {
             stats.shortHandedGoals, stats.blocked, stats.plusMinus, `${person.id}_${game.gameId}`],
             function(e) {
                 if (e) {
-                    return console.log(e.message)
+                    return console.log(e.message);
                 }
         });
         db.run(
@@ -84,7 +84,7 @@ export function initalizeDatabase() : Database {
             stats.shortHandedGoals, stats.blocked, stats.plusMinus],
             function(e) {
                 if (e) {
-                    return console.log(e.message)
+                    return console.log(e.message);
                 }
         });
         db.run(
@@ -94,7 +94,7 @@ export function initalizeDatabase() : Database {
             stats.shortHandedGoals, stats.blocked, stats.plusMinus, `${person.id}_${game.season}`],
             function(e) {
                 if (e) {
-                    return console.log(e.message)
+                    return console.log(e.message);
                 }
         });
     }
@@ -111,7 +111,7 @@ export function initalizeDatabase() : Database {
             stats.giveaways, stats.hits],
             function(e) {
                 if (e) {
-                    return console.log(e.message)
+                    return console.log(e.message);
                 }
             });
         db.run(
@@ -120,7 +120,7 @@ export function initalizeDatabase() : Database {
             stats.takeaways, stats.giveaways, stats.hits, `${teamInfo.id}_${game.season}` ],
             function(e) {
                 if (e) {
-                    return console.log(e.message)
+                    return console.log(e.message);
                 }
             });
         }

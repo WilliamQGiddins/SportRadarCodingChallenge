@@ -1,5 +1,5 @@
 
-export const nhlPlayersInsert : string =             
+export const nhlPlayersInsert  =             
 `INSERT OR REPLACE INTO nhl_players (
     id,
     full_name,
@@ -27,7 +27,7 @@ export const nhlPlayersInsert : string =
     ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?  
 )`;
 
-export const nhlGameStatsInsert: string =
+export const nhlGameStatsInsert =
 `INSERT OR IGNORE INTO nhl_games (
     playerid_gameid,
     player_id,
@@ -56,7 +56,7 @@ export const nhlGameStatsInsert: string =
     ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
 )`;
 
-export const nhlGameStatsUpdate: string =
+export const nhlGameStatsUpdate =
 `UPDATE nhl_games SET
 assists = (? - assists) + assists, 
 goals = (? - goals) + goals,
@@ -74,7 +74,7 @@ blocked = (? - blocked) + blocked,
 plus_minus = (? - plus_minus) + plus_minus
 WHERE player_id = ?`;
 
-export const nhlPlayerStatsInsert: string =
+export const nhlPlayerStatsInsert =
 `INSERT OR IGNORE INTO nhl_player_stats (
     id_season,
     id,
@@ -96,7 +96,7 @@ export const nhlPlayerStatsInsert: string =
     ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? 
 )`;
 
-export const nhlPlayerStatsUpdate: string =
+export const nhlPlayerStatsUpdate =
 `UPDATE nhl_player_stats SET
 assists = (? - assists) + assists, 
 goals = (? - goals) + goals,
@@ -114,7 +114,7 @@ blocked = (? - blocked) + blocked,
 plus_minus = (? - plus_minus) + plus_minus
 WHERE id_season = ?`;
 
-export const nhlTeamStatsInsert: string = 
+export const nhlTeamStatsInsert = 
 `INSERT OR IGNORE INTO nhl_team_stats (
     id_season,
     id,
@@ -132,7 +132,7 @@ export const nhlTeamStatsInsert: string =
     ?,?,?,?,?,?,?,?,?,?,?,?
 )`;
 
-export const nhlTeamStatsUpdate: string =
+export const nhlTeamStatsUpdate =
 `UPDATE nhl_team_stats SET 
 goals = (? - goals) + goals,
 pim = (? - pim) + pim,

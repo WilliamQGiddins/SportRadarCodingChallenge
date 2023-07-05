@@ -11,10 +11,10 @@ export class ReadLiveNHLGame {
     private ingestGameData = new CronJob(
         '0/15 * * * * * ', //Run every 15 seconds
         async () : Promise<void> => {
-            //Read NHL Data from API
+            //Read NHL data from api
             const isGameOver = await this.readNhlGameData(this.gameInfo, this.db);
 
-            //If Game is Over Stop Reading
+            //If game is over stop reading
              if(isGameOver) {
                  this.stopReadingGame();
              }
@@ -38,7 +38,7 @@ export class ReadLiveNHLGame {
         this.ingestGameData.stop();
     }
 
-    //Reads Player Data at the start of the game 
+    //Reads player data at the start of the game 
     async readPlayerInfo(): Promise<void> {
         //Call read player info
         const apiUrl = `https://statsapi.web.nhl.com/api/v1/game/${this.gameInfo.gameId}/feed/live`;
@@ -51,7 +51,7 @@ export class ReadLiveNHLGame {
                     playerInfo.push(players[player]);
                 }
             }
-            //Write Player Info to Database
+            //Write player info to database
             writePlayerInfo(this.db, playerInfo);
         } catch (e) {
             console.log(e);
@@ -84,7 +84,7 @@ export class ReadLiveNHLGame {
                 teamStats.push(homeTeam);
                 teamStats.push(awayTeam);
 
-            //Write Updated Stats To Database
+            //Write updated stats to database
             writePlayerStats(db, homePlayerStats, gameInfo, 'home');
             writePlayerStats(db, awayPlayerStats, gameInfo, 'away');
             writeTeamStats(db, teamStats, gameInfo);

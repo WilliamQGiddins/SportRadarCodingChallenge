@@ -8,14 +8,14 @@ import { Database } from "sqlite3";
 
 
 export async function initializeNhlStatsApp(db:Database) {
-    //Schedule games runs on init and at midnight everyday then Call watchForGames()
+    //Schedule games runs on init and at midnight everyday then call watchForGames()
     const scheduler = new ScheduleDailyNhlGames();
     let todaysSchedule = await scheduler.createSchedule();
     console.log(`Schedule for ${new Date} complete`);
     await watchForGames(todaysSchedule);
 
     const scheduleCron = new CronJob(
-        '0 0 * * *', //Run every Midnight
+        '0 0 * * *', //Run every midnight
         async () => {
             todaysSchedule = await scheduler.createSchedule();
             console.log(`Schedule for ${new Date} complete`);
@@ -31,19 +31,17 @@ export async function initializeNhlStatsApp(db:Database) {
         const gameWatchCron = new CronJob(
             '* * * * *',  //Run every minute
             async () => {
-                //let upcomingGame = currentSchedule.find(game => Math.abs(new Date(game.startDateTime).getTime() - new Date().getTime()) <= 300000);
-                
-                //TESTING
-                const upcomingGame = currentSchedule.find(game => new Date(game.startDateTime).getTime() - new Date().getTime() <= 300000);
 
-                console.log('Upcoming Game ' + JSON.stringify(upcomingGame, null, 2));
+                const upcomingGame = currentSchedule.find(game => Math.abs(new Date(game.startDateTime).getTime() - new Date().getTime()) <= 300000);
+                
                 if(upcomingGame) {
+                    console.log('Upcoming Game ' + JSON.stringify(upcomingGame, null, 2));
                     try {
                         const currentGame = new ReadLiveNHLGame(upcomingGame, db);
                         await currentGame.readPlayerInfo();
                         await currentGame.startReadingGame();
 
-                        //Remove Current Game from schedule
+                        //Remove current game from schedule
                         currentSchedule = currentSchedule.filter(game => game !== upcomingGame);
 
                         if(!currentSchedule?.length) {

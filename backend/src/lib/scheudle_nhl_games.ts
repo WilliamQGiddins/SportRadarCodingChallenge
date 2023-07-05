@@ -10,12 +10,9 @@ export class ScheduleDailyNhlGames {
         const apiUrl = `https://statsapi.web.nhl.com/api/v1/schedule?date=${dateParameter}`;
         let gameSchedule: NHLGameInfo [] = [];
 
-        //Make Schedule API call for todays games
+        //Make schedule api call for todays games
         try {
-            //const response = await axios.get(apiUrl);
-            // TO DO: Testing
-            const response = await axios.get('https://statsapi.web.nhl.com/api/v1/schedule?date=2017-10-04');
-
+            const response = await axios.get(apiUrl);
             if (response.data.dates?.length) {
                 gameSchedule = response.data.dates[0].games;
             } 
@@ -28,7 +25,7 @@ export class ScheduleDailyNhlGames {
     async createSchedule(): Promise<GameSchedule []> {
         const games = await this.getDailySchedule();
 
-        //Parse Json Object into Array of GameSchedules
+        //Parse Json Object into array of GameSchedules
         const gameSchedule : GameSchedule [] = [];
         if(games?.length) {
             for (const game of games) {
